@@ -1,0 +1,5 @@
+scenario,controller,n,average_waiting_time_s_mean,average_waiting_time_s_stdev,average_travel_time_s_mean,average_travel_time_s_stdev,average_time_loss_s_mean,average_time_loss_s_stdev,waiting_improvement_pct
+balanced,adaptive,5,10.52,0.24,65.44,0.53,20.28,0.32,18.64
+balanced,fixed,5,12.93,0.31,68.23,0.77,23.04,0.53,
+ns-heavy,adaptive,5,10.04,0.47,66.39,0.54,21.24,0.55,31.89
+ns-heavy,fixed,5,14.74,0.3,71.96,0.7,26.79,0.56,
