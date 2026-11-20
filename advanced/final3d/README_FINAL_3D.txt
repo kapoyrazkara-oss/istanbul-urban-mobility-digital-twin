@@ -45,3 +45,11 @@ Roundabout kavsaklarda sinyal direkleri yerine yield-on-entry isaretleri kullani
 
 SIMULASYON ZAMANI
 Replay time, SUMO'nun saniye cinsinden simulasyon saatidir. Gercek sabah 08:00 veya aksam 18:00 davranisi route dosyasindaki talep dagilimi ile tanimlanir; viewer bu talebi sonradan uydurmaz.
+
+AI ADAPTIVE CONTROLLER
+- AI Adaptive, SUMO içinde çalışan kısıtlı online Q-learning prototipidir; LLM canlı kavşak kararı vermez.
+- Durum: yerel kuyruk, komşu baskısı ve mevcut faz. Aksiyon: fazı tut, yeşili uzat veya minimum yeşilden sonra güvenli biçimde kısalt.
+- Güvenlik: minGreen=12 s, maxGreen=60 s; sarı/all-red fazları SUMO sinyal programı tarafından korunur.
+- Araç politikası: SUMO'nun car-following/IDM ve trafik ışığı uyumu kullanılır. Bu nedenle araçlar kırmızı ışığı “görsel olarak” geçmemelidir; görülen anomali faz eşleme veya interpolasyon hatasıysa ayrıca test edilmelidir.
+- Viewer'da AI Adaptive butonu ve rush-hour/balanced için data/ai_rush.json ile data/ai_balanced.json replay'leri bulunur.
+- Bu prototipin sonuçları mevcut multi-seed doğrulama sonuçlarının yerine geçmez; önce aynı seed ve aynı route'larla ayrı bir AI karşılaştırma deneyi olarak raporlanmalıdır.
