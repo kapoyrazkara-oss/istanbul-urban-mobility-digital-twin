@@ -28,3 +28,20 @@ DUZENLEME
 
 PROJE BAGLANTISI
 Bu viewer, Istanbul Urban Mobility Digital Twin Build projesindeki 5x5 / 25 sinyalli SUMO deneylerinin replay'lerini gorsellestirir. Ana dogrulanmis sonuclar README/article klasorlerindeki multi-seed dokumantasyondadir; viewer bir sunum ve inceleme arayuzudur.
+
+TRAFIK SENARYOSU GUNCELLEME
+Viewer icindeki Traffic profile / time window seceneginden Rush-hour demand veya Balanced demand secilebilir. Bu secim sadece UI rengi degildir; ilgili SUMO replay JSON dosyalari yeniden yuklenir ve araclar, kuyruklar, sinyaller, heatmap ve grafik yeni veriyle guncellenir.
+
+Yeni bir sabah, aksam veya gece senaryosu icin once advanced/routes altinda ilgili SUMO route dosyasini tanimlayin ve advanced/export_3d_v2.py icindeki ROUTES sozlugune ekleyin. Ornek exporter komutlari:
+python advanced/export_3d_v2.py --controller fixed --scenario balanced --steps 600 --output advanced/final3d/data/balanced_fixed.json
+python advanced/export_3d_v2.py --controller coordinated-adaptive --scenario rush-hour --steps 600 --output advanced/final3d/data/v2_coordinated.json
+Daha sonra viewer.html icindeki PATHS sozlugune yeni scenario adini ve uc controller JSON yolunu ekleyin.
+
+YOGUNLUK VE KUYRUK RENKLERI
+Her kavsagin etrafindaki halka o anki queue degerine gore yesil, sari veya kirmizi olur. Heatmap ayni veriyi 5x5 gridde gosterir. Yesil dusuk, sari orta, kirmizi yuksek kuyruk baskisini ifade eder.
+
+KAVSAK BAZLI KURALLAR
+Roundabout kavsaklarda sinyal direkleri yerine yield-on-entry isaretleri kullanilir. T-junction formlarinda ana yol onceligi ve yan koldan yield mantigi kullanilir. Four-way ve offset kavsaklarda iki asamali sinyal fazlari gosterilir: NS green, NS transition, EW green ve EW transition. Signal phase paneli aktif fazi gosterir.
+
+SIMULASYON ZAMANI
+Replay time, SUMO'nun saniye cinsinden simulasyon saatidir. Gercek sabah 08:00 veya aksam 18:00 davranisi route dosyasindaki talep dagilimi ile tanimlanir; viewer bu talebi sonradan uydurmaz.
