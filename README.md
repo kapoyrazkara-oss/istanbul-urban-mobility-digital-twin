@@ -1,62 +1,60 @@
-# Istanbul Adaptive Traffic Signal Simulator
+# Istanbul Urban Mobility Digital Twin
 
-A SUMO- and Python-based prototype for comparing fixed-time and traffic-responsive traffic signal control at a four-way intersection.
+SUMO-based adaptive traffic signal simulation and 3D urban mobility digital twin for Istanbul.
 
 ## Research question
 
-Can a traffic-responsive signal controller reduce average waiting time compared with a fixed-time controller under uneven traffic conditions?
+Can a simple, interpretable adaptive traffic-signal controller reduce waiting time compared with a fixed-time baseline under different traffic-demand patterns?
 
-## Hypothesis
+## Validated result
 
-A traffic-responsive signal controller can reduce average waiting time compared with a fixed-time controller under uneven traffic conditions, while respecting minimum green times and safe phase transitions.
+Five matched random seeds were run for each controller and scenario. The same seed gives Fixed-Time and Adaptive the same demand.
 
-## Project scope
+| Scenario | Fixed-Time | Adaptive | Reduction |
+|---|---:|---:|---:|
+| Balanced | 12.93 ± 0.31 s | 10.52 ± 0.24 s | 18.64% |
+| North-south-heavy | 14.74 ± 0.30 s | 10.04 ± 0.47 s | 31.89% |
 
-This project uses a simulated 5×5 network with 25 signalised intersections. It does not control real traffic lights and does not claim to represent all of Istanbul's traffic. The validated paper results remain the fixed-time versus rule-based adaptive comparison; the AI controller below is an additional prototype and is not mixed into those reported results.
+The earlier single-run article numbers were 24.7% and 35.7%. They are preserved as preliminary results; this repository reports the multi-seed validation separately.
 
-## Planned metrics
+## Run the experiments
 
-- Average waiting time
-- Maximum queue length
-- Average travel time
-- Number of completed vehicles
-- Number of stops
-
-## Planned comparison
-
-1. Fixed-time controller
-2. Traffic-responsive adaptive controller
-3. Balanced, uneven, and changing traffic scenarios
-
-## Technology
-
-- Eclipse SUMO
-- Python
-- TraCI
-- Matplotlib / Streamlit for analysis and visualization
-
-## First milestone
-
-Create and run a four-way intersection with fixed-time traffic lights and reproducible vehicle routes.
-
-## Current results
-
-The first reproducible experiments are complete. In the balanced scenario, average waiting time was 12.97 seconds with fixed-time control and 9.76 seconds with adaptive control. In the north-south-heavy scenario, the values were 15.62 seconds and 10.05 seconds respectively. These are simulation results, not a prediction for all of Istanbul.
-
-## AI adaptive and safe-driving prototype
-
-`advanced/export_3d_v2.py --controller ai-adaptive` runs a deterministic, seed-controlled online Q-learning prototype. Its state contains local queue, neighbour pressure, and current phase; its actions are hold, extend green, or safely shorten green. Minimum green (12 s), maximum green (60 s), and the SUMO yellow/all-red transition program remain hard constraints. This is intentionally a constrained policy rather than an LLM making live signal decisions.
-
-For the AI replay, `--driver-policy safe-ai` activates SUMO's full speed-safety checks (`speedMode=31`) and collision-safe lane-change mode (`laneChangeMode=1621`). SUMO's car-following and right-of-way logic therefore handle stopping and signal compliance. The 3D viewer only replays the resulting trajectories; it does not invent vehicle decisions. AI replay files are available for rush-hour and balanced demand in `advanced/final3d/data/ai_rush.json` and `advanced/final3d/data/ai_balanced.json`.
-
-## Run the simulator
+Install SUMO and Python first, then:
 
 ```bash
-python simulator.py --controller adaptive --scenario balanced --gui --delay 200
+pip install -r requirements.txt
+python experiments/run_all.py --seeds 11 22 33 44 55
+python experiments/aggregate_results.py
 ```
 
-Use `fixed` or `adaptive` for the controller and `balanced` or `ns-heavy` for the traffic scenario. Results are written to `results/experiment_results.csv`.
+The raw matched results are saved to `results/multiseed_results.csv`; the summary is saved to `results/multiseed_summary.csv`; the chart is in `results/figures/`.
 
-## Build Article
+Run one experiment manually:
 
-The current article draft is in `article/build-article-draft.md`. The SUMO phase is targeted for completion on 5 November 2026; 3D visualization work begins afterward.
+```bash
+python simulator.py --controller adaptive --scenario balanced --seed 11 --steps 650
+```
+
+## Digital twin replay
+
+The recommended presentation viewer is `advanced/final3d/START_FINAL_3D.bat`. Extract the repository or the final ZIP, double-click that launcher on Windows, and keep its command window open while Chrome runs at the local HTTP address. Do not open `viewer.html` directly with `file://`; the launcher avoids browser JSON/CORS problems and keeps Three.js local inside the package.
+
+The final viewer compares Fixed-Time, Local Adaptive, and Coordinated Adaptive on a 5×5 / 25-intersection SUMO network. It includes a procedural Istanbul-inspired 3D environment, traffic-light state replay, live queue telemetry, queue trajectory, and a 5×5 intersection-pressure heatmap. The map is a presentation context rather than a geospatially exact city map; traffic data, signal states, and metrics come from SUMO.
+
+## Repository map
+
+- `simulator.py`: original four-way experiment runner with reproducible seeds.
+- `experiments/run_all.py`: five-seed paired experiment runner.
+- `experiments/aggregate_results.py`: mean, standard deviation, and improvement calculation.
+- `simulation/`: original SUMO network and routes.
+- `advanced/`: 25-intersection digital-twin replay and export tools.
+- `article/`: revised Build Article, methodology, and reviewer response.
+- `results/`: raw CSV results, summary table, and chart.
+
+## Limitations
+
+This is a rule-based prototype with synthetic demand on a small research network. It is not a city-wide prediction and is not ready for deployment without real detector data, safety validation, pedestrian/public-transport constraints, calibration, and field testing.
+
+## Show-it
+
+A 3+ minute demonstration video will be linked here after recording. It will show the SUMO network, Fixed-Time baseline, Adaptive controller, metrics, and limitations.

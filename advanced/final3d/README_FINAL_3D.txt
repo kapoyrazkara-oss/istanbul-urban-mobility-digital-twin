@@ -14,7 +14,7 @@ ONEMLI
 - Chrome, Edge veya Firefox guncel surumleri desteklenir.
 
 KONTROLLER
-- Fixed-Time, Local Adaptive ve Coordinated Adaptive butonlari controller replay'ini degistirir.
+- Fixed-Time ve Adaptive butonlari controller replay'ini degistirir.
 - Pause/Play, Reset ve hiz secimi replay akisini yonetir.
 - Mouse sol tus orbit, tekerlek zoom, sag tus pan icindir.
 - Overview, Street ve North kamera presetleridir.
@@ -22,7 +22,7 @@ KONTROLLER
 
 DUZENLEME
 - Renkler, bina boyutlari ve sahne elemanlari viewer.html icindeki buildCity, buildIntersection ve tree fonksiyonlarinda bulunur.
-- Replay verileri data/v2_fixed.json, data/v2_local.json ve data/v2_coordinated.json dosyalaridir.
+- Replay verileri data/v2_fixed.json ve data/v2_local.json dosyalaridir.
 - Yeni veri eklemek icin DATA nesnesine yeni bir JSON yolu ve LABELS nesnesine gorunen ad ekleyin.
 - vendor klasorundeki dosyalari silmeyin; bunlar local Three.js runtime'idir.
 
@@ -45,11 +45,3 @@ Roundabout kavsaklarda sinyal direkleri yerine yield-on-entry isaretleri kullani
 
 SIMULASYON ZAMANI
 Replay time, SUMO'nun saniye cinsinden simulasyon saatidir. Gercek sabah 08:00 veya aksam 18:00 davranisi route dosyasindaki talep dagilimi ile tanimlanir; viewer bu talebi sonradan uydurmaz.
-
-AI ADAPTIVE CONTROLLER
-- AI Adaptive, SUMO içinde çalışan kısıtlı online Q-learning prototipidir; LLM canlı kavşak kararı vermez.
-- Durum: yerel kuyruk, komşu baskısı ve mevcut faz. Aksiyon: fazı tut, yeşili uzat veya minimum yeşilden sonra güvenli biçimde kısalt.
-- Güvenlik: minGreen=12 s, maxGreen=60 s; sarı/all-red fazları SUMO sinyal programı tarafından korunur.
-- Araç politikası: SUMO'nun car-following/IDM ve trafik ışığı uyumu kullanılır. Bu nedenle araçlar kırmızı ışığı “görsel olarak” geçmemelidir; görülen anomali faz eşleme veya interpolasyon hatasıysa ayrıca test edilmelidir.
-- Viewer'da AI Adaptive butonu ve rush-hour/balanced için data/ai_rush.json ile data/ai_balanced.json replay'leri bulunur.
-- Bu prototipin sonuçları mevcut multi-seed doğrulama sonuçlarının yerine geçmez; önce aynı seed ve aynı route'larla ayrı bir AI karşılaştırma deneyi olarak raporlanmalıdır.
