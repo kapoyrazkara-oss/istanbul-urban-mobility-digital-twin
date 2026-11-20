@@ -37,9 +37,9 @@ python simulator.py --controller adaptive --scenario balanced --seed 11 --steps 
 
 ## Digital twin replay
 
-Open `advanced/START_DIGITAL_TWIN_V2_SLOW.bat` on Windows for the slow presentation replay. The viewer compares Fixed-Time, Local Adaptive, and Coordinated Adaptive on a 5×5 / 25-intersection SUMO network and includes a live queue chart and intersection-pressure heatmap.
+The recommended presentation viewer is `advanced/final3d/START_FINAL_3D.bat`. Extract the repository or the final ZIP, double-click that launcher on Windows, and keep its command window open while Chrome runs at the local HTTP address. Do not open `viewer.html` directly with `file://`; the launcher avoids browser JSON/CORS problems and keeps Three.js local inside the package.
 
-The 3D environment is Istanbul-inspired rather than a geospatially exact map. The traffic data, signal states, and metrics come from SUMO; the buildings and streetscape form a visual context layer.
+The final viewer compares Fixed-Time, Local Adaptive, and Coordinated Adaptive on a 5×5 / 25-intersection SUMO network. It includes a procedural Istanbul-inspired 3D environment, traffic-light state replay, live queue telemetry, queue trajectory, and a 5×5 intersection-pressure heatmap. The map is a presentation context rather than a geospatially exact city map; traffic data, signal states, and metrics come from SUMO.
 
 ## Repository map
 

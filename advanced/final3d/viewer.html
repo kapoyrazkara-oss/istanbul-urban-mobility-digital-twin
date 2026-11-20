@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Istanbul Adaptive Mobility Atlas — Final 3D</title><link rel="icon" href="data:,">
+<style>
+:root{--bg:#071018;--panel:rgba(8,18,28,.91);--line:rgba(159,190,207,.22);--text:#e9f2f4;--muted:#92aab3;--cyan:#57d6d2;--amber:#ffbf69;--red:#ff6572;--green:#6ee7a1;--shadow:0 18px 45px rgba(0,0,0,.3)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}canvas{display:block}
+#app{position:fixed;inset:0}.panel{position:fixed;z-index:5;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(14px);border-radius:16px}.left{top:18px;left:18px;width:330px;padding:18px}.right{top:18px;right:18px;width:258px;padding:16px}.bottom{left:18px;right:18px;bottom:16px;height:118px;padding:12px 16px;display:flex;gap:18px;align-items:stretch}.brand{font-size:18px;font-weight:800;letter-spacing:-.3px}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.8px;color:var(--cyan);font-weight:800;margin-bottom:8px}.desc{font-size:11px;color:#bad0d5;line-height:1.48;margin:9px 0 14px}.purpose{font-size:11px;line-height:1.45;color:#d8e5e6;background:rgba(87,214,210,.09);border-left:3px solid var(--cyan);padding:9px 10px;border-radius:8px;margin-bottom:14px}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}.modes button,.controls button,.controls select,.preset{font:inherit;font-size:11px;color:var(--text);background:#102331;border:1px solid #315060;border-radius:8px;padding:8px 7px;cursor:pointer}.modes button:hover,.controls button:hover,.preset:hover{border-color:var(--cyan);background:#153445}.modes button.active{background:var(--cyan);color:#061316;border-color:var(--cyan);font-weight:800}.note{font-size:10px;color:var(--muted);margin:9px 0 12px}.control-title{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.3px;margin:13px 0 7px}.controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.controls select{padding:7px 8px}.metric{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(159,190,207,.12);font-size:11px}.metric:last-child{border-bottom:0}.metric b{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--cyan);font-size:12px}.status{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--muted);margin-top:12px}.status i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}.status.error i{background:var(--red);box-shadow:0 0 10px var(--red)}#error{display:none;position:fixed;z-index:30;inset:25% 25%;padding:24px;border-radius:16px;background:#31151a;border:1px solid #ff6572;color:#fff;box-shadow:var(--shadow);font:13px/1.5 ui-monospace,monospace;white-space:pre-wrap}#loading{position:fixed;z-index:20;inset:0;display:grid;place-items:center;background:#071018;color:#dcebed;font-size:14px;letter-spacing:.2px}.loading-card{padding:22px 28px;border:1px solid var(--line);border-radius:14px;background:rgba(8,18,28,.92);box-shadow:var(--shadow)}.loading-card span{display:block;color:var(--muted);font-size:11px;margin-top:7px}.chart-wrap{flex:1;min-width:260px}.chart-title,.heat-title{font-size:10px;text-transform:uppercase;letter-spacing:1.3px;color:var(--muted);margin-bottom:5px}.chart{width:100%;height:76px;display:block}.heat-wrap{width:180px}.heat{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}.cell{aspect-ratio:1;border-radius:4px;background:#15313b;display:grid;place-items:center;font:9px ui-monospace,monospace;color:#dff;font-weight:700}.legend{position:fixed;z-index:4;right:292px;bottom:144px;background:rgba(8,18,28,.78);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:10px;color:var(--muted)}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}.g{background:var(--green)}.a{background:var(--amber)}.r{background:var(--red)}.camera{position:fixed;z-index:5;right:292px;top:18px;display:flex;gap:6px}.camera button{font-size:10px;padding:7px 9px;color:#dcebed;background:rgba(8,18,28,.8);border:1px solid var(--line);border-radius:7px;cursor:pointer}.camera button:hover{border-color:var(--cyan)}
+@media(max-width:900px){.left{width:286px}.right{width:220px}.legend,.camera{display:none}.bottom{height:106px}.heat-wrap{width:150px}}@media(max-width:680px){.right{display:none}.left{width:calc(100% - 36px)}.bottom{left:18px;right:18px}.heat-wrap{display:none}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="loading"><div class="loading-card">Istanbul Adaptive Mobility Atlas<span>Yerel SUMO replay verileri ve 3D sahne hazırlanıyor…</span></div></div>
+<div id="error"></div>
+<section class="panel left">
+  <div class="eyebrow">TKS Build · Digital Twin</div>
+  <div class="brand">Istanbul Mobility Atlas</div>
+  <div class="desc">25 sinyalli kavşak üzerinde Fixed-Time ve adaptive controller replay'lerini aynı şehir sahnesinde izleyin.</div>
+  <div class="purpose">Bu viewer, gerçek saha uygulamasından önce ölçülebilir bir adaptive-signal pilotunu güvenli biçimde göstermek için hazırlanmıştır.</div>
+  <div class="modes"><button data-mode="fixed">Fixed-Time</button><button data-mode="local">Local Adaptive</button><button data-mode="coordinated">Coordinated</button></div>
+  <div id="modeNote" class="note">Controller seçin; tüm metrikler aynı replay zamanından güncellenir.</div>
+  <div class="control-title">Replay controls</div>
+  <div class="controls"><button id="play">Pause</button><button id="reset">Reset</button><select id="speed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></div>
+  <div class="control-title">Camera</div>
+  <div class="controls"><button class="preset" data-camera="overview">Overview</button><button class="preset" data-camera="street">Street</button><button class="preset" data-camera="north">North</button></div>
+  <div class="status" id="status"><i></i><span>Replay ready</span></div>
+</section>
+<section class="panel right">
+  <div class="eyebrow">Live telemetry</div>
+  <div class="metric"><span>Controller</span><b id="controller">—</b></div>
+  <div class="metric"><span>Scenario</span><b id="scenario">—</b></div>
+  <div class="metric"><span>Replay time</span><b id="clock">0 s</b></div>
+  <div class="metric"><span>Active vehicles</span><b id="cars">0</b></div>
+  <div class="metric"><span>Network queue</span><b id="queue">0</b></div>
+  <div class="metric"><span>Peak queue</span><b id="maxq">0</b></div>
+  <div class="metric"><span>Adaptive decisions</span><b id="decisions">—</b></div>
+  <div class="metric"><span>Phase changes</span><b id="changes">—</b></div>
+</section>
+<div class="camera" aria-label="camera shortcuts"></div>
+<div class="legend"><span class="dot g"></span>green&nbsp;&nbsp;<span class="dot a"></span>amber&nbsp;&nbsp;<span class="dot r"></span>red</div>
+<section class="panel bottom"><div class="chart-wrap"><div class="chart-title">Queue trajectory</div><canvas id="chart" class="chart"></canvas></div><div class="heat-wrap"><div class="heat-title">5×5 live queue heatmap</div><div id="heat" class="heat"></div></div></section>
+<script type="module">
+import * as THREE from './vendor/three.module.js';
+import { OrbitControls } from './vendor/OrbitControls.js';
+
+const DATA={fixed:'./data/v2_fixed.json',local:'./data/v2_local.json',coordinated:'./data/v2_coordinated.json'};
+const LABELS={fixed:'Fixed-Time',local:'Local Adaptive',coordinated:'Coordinated Adaptive'};
+const COLORS={fixed:0xff8b78,local:0x69d5c7,coordinated:0xffc36b};
+let datasets={}, mode='coordinated', frameIndex=0, playing=true, lastTime=performance.now(), elapsed=0, speed=1, maxQueueSeen=0, selectedIntersection=null;
+const app=document.querySelector('#app'), loading=document.querySelector('#loading'), errorBox=document.querySelector('#error');
+const ui={controller:document.querySelector('#controller'),scenario:document.querySelector('#scenario'),clock:document.querySelector('#clock'),cars:document.querySelector('#cars'),queue:document.querySelector('#queue'),maxq:document.querySelector('#maxq'),decisions:document.querySelector('#decisions'),changes:document.querySelector('#changes'),modeNote:document.querySelector('#modeNote'),play:document.querySelector('#play'),status:document.querySelector('#status'),statusText:document.querySelector('#status span'),heat:document.querySelector('#heat'),chart:document.querySelector('#chart')};
+let scene,camera,renderer,controls,vehicleLayer,signalLayer,intersectionLayer,raycaster,mouse,chartCtx;
+const worldScale=.12, offset=440;
+const intersections=[];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function worldPos(x,y){return new THREE.Vector3((x-offset)*worldScale,0,(offset-y)*worldScale)}
+function mat(color,rough=.78,metal=0){return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal})}
+function box(w,h,d,color,rough=.78){return new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(color,rough))}
+function cyl(r,h,color,seg=12){return new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,seg),mat(color))}
+function add(parent,obj,pos,rot){obj.position.set(pos.x,pos.y,pos.z);if(rot)obj.rotation.set(rot.x||0,rot.y||0,rot.z||0);parent.add(obj);return obj}
+function initScene(){
+  scene=new THREE.Scene(); scene.background=new THREE.Color(0x071018); scene.fog=new THREE.Fog(0x071018,105,185);
+  camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,.1,500); camera.position.set(76,78,82);
+  renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace; app.appendChild(renderer.domElement);
+  controls=new OrbitControls(camera,renderer.domElement); controls.target.set(0,0,0); controls.enableDamping=true; controls.dampingFactor=.06; controls.minDistance=18; controls.maxDistance=155; controls.maxPolarAngle=Math.PI*.47;
+  scene.add(new THREE.HemisphereLight(0xa8dce0,0x1a211d,2.2)); const sun=new THREE.DirectionalLight(0xffe5be,2.4);sun.position.set(-35,85,45);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);scene.add(sun); const fill=new THREE.PointLight(0x4db4c5,2.5,130);fill.position.set(0,28,0);scene.add(fill);
+  const ground=box(142,.7,142,0x1b2924);ground.position.y=-.55;ground.receiveShadow=true;scene.add(ground);
+  vehicleLayer=new THREE.Group(); signalLayer=new THREE.Group(); intersectionLayer=new THREE.Group(); scene.add(vehicleLayer,signalLayer,intersectionLayer); buildCity();
+  raycaster=new THREE.Raycaster();mouse=new THREE.Vector2();renderer.domElement.addEventListener('pointerdown',onPick);window.addEventListener('resize',onResize); setCamera('overview');
+}
+function buildCity(){
+  const roadMat=mat(0x26333a), sidewalkMat=mat(0x8d9a93), laneMat=mat(0xd7c9a1), waterMat=mat(0x0d3e4b);
+  // sea and shore
+  const sea=box(24,.18,142,0x0b4451);sea.position.set(69,-.18,0);scene.add(sea); const shore=box(3,.28,142,0x9aa57f);shore.position.set(55,-.08,0);scene.add(shore);
+  // roads, crossings and lane markers
+  const coords=[1.6,221.6,441.6,661.6,881.6];
+  for(const c of coords){const x=(c-offset)*worldScale,z=(offset-c)*worldScale; const hRoad=box(142,.16,5.6,0x29373d);hRoad.position.set(0,-.18,z);scene.add(hRoad);const vRoad=box(5.6,.17,142,0x29373d);vRoad.position.set(x,-.17,0);scene.add(vRoad); for(let p=-66;p<66;p+=8){const d=box(3.4,.04,.075,0xc9c2a4);d.position.set(p,-.08,z);scene.add(d);const e=box(.075,.04,3.4,0xc9c2a4);e.position.set(x,-.07,p);scene.add(e)} }
+  // blocks with low contrast buildings
+  for(let ix=0;ix<4;ix++)for(let iz=0;iz<4;iz++){const cx=-39.6+ix*26.4,cz=-39.6+iz*26.4;if(cx>45)continue; const n=2+(ix*3+iz)%3;for(let k=0;k<n;k++){const w=4.5+(k%2)*2.5,d=4.2+((k+ix)%3),h=3.5+((k*7+iz*3)%7);const b=box(w,h,d,[0x34464a,0x3b4b4b,0x425255][(ix+iz+k)%3],.9);b.position.set(cx+(k-n/2)*5.5,-.02+h/2,cz+((k%2)-.5)*6);b.castShadow=true;b.receiveShadow=true;scene.add(b);addWindows(b,w,h,d)} }
+  // park strip and trees
+  const park=box(15,.12,28,0x315345);park.position.set(45,-.1,-34);scene.add(park);for(let i=0;i<14;i++){const t=tree(38+(i%4)*3.5,-.1,-45+Math.floor(i/4)*7);scene.add(t)}
+  // landmark tower
+  const tower=new THREE.Group();add(tower,cyl(1.8,15,0xb96e4c,18),new THREE.Vector3(0,7.5,0));add(tower,cyl(.8,5,0xdaa36a,16),new THREE.Vector3(0,17.2,0));const cap=cyl(1.4,1.2,0xffc36b,16);add(tower,cap,new THREE.Vector3(0,19.9,0));tower.position.set(42,0,34);scene.add(tower);
+  // skyline mast
+  const mast=new THREE.Group();add(mast,cyl(.28,18,0x879ba1),new THREE.Vector3(0,9,0));const top=box(4,.45,.45,0xd7a965);add(mast,top,new THREE.Vector3(0,18,0));mast.position.set(51,0,19);scene.add(mast);
+  coords.forEach((c,ix)=>coords.forEach((d,iz)=>{const p=worldPos(c,d);intersections.push({id:String.fromCharCode(65+ix)+iz,x:c,y:d,pos:p});buildIntersection(intersections[intersections.length-1],sidewalkMat,laneMat)}));
+}
+function addWindows(b,w,h,d){for(let y=1.4;y<h-.4;y+=1.6){for(let x=-w/2+1;x<w/2-.2;x+=1.4){const win=box(.34,.42,.035,0xb2d5ca,.25);win.position.set(x,y,d/2+.03);b.add(win)}}}
+function tree(x,y,z){const g=new THREE.Group();add(g,cyl(.15,1.2,0x563f2d,8),new THREE.Vector3(0,.6,0));const crown=new THREE.Mesh(new THREE.IcosahedronGeometry(1.05,1),mat(0x4e8060));crown.position.y=1.55;g.add(crown);g.position.set(x,y,z);return g}
+function buildIntersection(it,sidewalkMat,laneMat){
+  const g=new THREE.Group();g.userData.intersectionId=it.id;g.position.copy(it.pos);const island=box(5.2,.13,5.2,0x4b5656);island.position.y=-.01;g.add(island); const cross=box(5.8,.025,.75,0xe0d9bd);cross.position.y=.08;g.add(cross);const cross2=cross.clone();cross2.rotation.y=Math.PI/2;g.add(cross2);
+  const plaque=box(1.8,.08,.45,0x0a2630);plaque.position.set(0,1.35,-2.8);g.add(plaque); const pole=cyl(.08,3.5,0x53666a,10);
+  [[-2.65,0,0],[2.65,0,Math.PI],[0,-2.65,Math.PI/2],[0,2.65,-Math.PI/2]].forEach(([x,z,r])=>{const pg=new THREE.Group();add(pg,pole.clone(),new THREE.Vector3(x,1.75,z));const arm=box(.75,.08,.08,0x53666a);add(pg,arm,new THREE.Vector3(x+(Math.abs(z)<1?(.38*(x>0?-1:1)):0),3.25,z+(Math.abs(x)<1?(.38*(z>0?-1:1)):0)));const heads=new THREE.Group();for(let q=0;q<3;q++){const l=new THREE.Mesh(new THREE.SphereGeometry(.13,10,8),new THREE.MeshStandardMaterial({color:0x330e14,emissive:0x100305,emissiveIntensity:1}));l.position.set(x+(Math.abs(z)<1?(.48*(x>0?-1:1)):0),3.05-q*.3,z+(Math.abs(x)<1?(.48*(z>0?-1:1)):0));heads.add(l)};pg.add(heads);pg.userData.lights=heads.children;g.add(pg)});
+  intersectionLayer.add(g);it.group=g;it.signalGroups=g.children.filter(x=>x.userData&&x.userData.lights);g.traverse(o=>{if(o.isMesh)o.castShadow=true});
+}
+function makeVehicle(v){const g=new THREE.Group();g.userData.vehicleId=v.id;const body=box(1.35,.42,2.6,0xb84e46,.48);body.position.y=.42;g.add(body);const roof=box(1.05,.32,1.25,0x9ec0bf,.28);roof.position.set(0,.78,-.12);g.add(roof);for(const x of[-.58,.58])for(const z of[-.82,.82]){const wh=cyl(.16,.12,0x111820,10);wh.rotation.z=Math.PI/2;wh.position.set(x,.2,z);g.add(wh)};return g}
+function updateVehicles(frame){vehicleLayer.clear();for(const v of frame.vehicles||[]){const g=makeVehicle(v),p=worldPos(v.x,v.y);g.position.set(p.x,.02,p.z);g.rotation.y=THREE.MathUtils.degToRad(-v.a+90);vehicleLayer.add(g)}}
+function updateSignals(frame){const states=frame.signals||{};intersections.forEach(it=>{const state=states[it.id]??0;const color=state===0?0x65e79a:state===1?0xffc861:0xf45f69;it.signalGroups.forEach(group=>group.userData.lights.forEach(l=>{l.material.color.setHex(color);l.material.emissive.setHex(color);l.material.emissiveIntensity=state===0?2.3:1.7}))})}
+function updateHeat(frame){ui.heat.innerHTML='';const q=frame.queues||{};intersections.forEach(it=>{const v=q[it.id]||0;const cell=document.createElement('div');cell.className='cell';cell.textContent=v;cell.title=it.id+' queue '+v;const t=clamp(v/Math.max(1,datasets[mode].meta.maxQueue||20),0,1);cell.style.background=`rgb(${Math.round(24+190*t)},${Math.round(65-35*t)},${Math.round(72-25*t)})`;ui.heat.appendChild(cell)})}
+function drawChart(){const c=ui.chart,dpr=Math.min(devicePixelRatio,2),w=c.clientWidth,h=c.clientHeight;c.width=w*dpr;c.height=h*dpr;chartCtx=c.getContext('2d');chartCtx.scale(dpr,dpr);chartCtx.clearRect(0,0,w,h);const frames=datasets[mode]?.frames||[];const vals=frames.map(f=>f.queue||0);if(!vals.length)return;const max=Math.max(...vals,1);chartCtx.strokeStyle='rgba(159,190,207,.17)';chartCtx.lineWidth=1;for(let i=1;i<4;i++){chartCtx.beginPath();chartCtx.moveTo(0,h*i/4);chartCtx.lineTo(w,h*i/4);chartCtx.stroke()}chartCtx.beginPath();vals.forEach((v,i)=>{const x=i/(vals.length-1)*w,y=h-5-(v/max)*(h-12);i?chartCtx.lineTo(x,y):chartCtx.moveTo(x,y)});chartCtx.strokeStyle=mode==='fixed'?'#ff8b78':mode==='local'?'#69d5c7':'#ffc36b';chartCtx.lineWidth=2;chartCtx.stroke();const f=frames[frameIndex];if(f){const x=frameIndex/(vals.length-1)*w;chartCtx.fillStyle='#fff';chartCtx.beginPath();chartCtx.arc(x,h-5-(f.queue/max)*(h-12),3,0,Math.PI*2);chartCtx.fill()}}
+function showFrame(){const ds=datasets[mode],frame=ds.frames[frameIndex];if(!frame)return;updateVehicles(frame);updateSignals(frame);updateHeat(frame);drawChart();maxQueueSeen=Math.max(maxQueueSeen,frame.queue||0);ui.controller.textContent=LABELS[mode];ui.scenario.textContent=ds.meta.scenario||'replay';ui.clock.textContent=`${frame.t.toFixed(0)} s`;ui.cars.textContent=String(frame.vehicles?.length||0);ui.queue.textContent=String(frame.queue||0);ui.maxq.textContent=String(Math.max(maxQueueSeen,ds.meta.maxQueue||0));ui.decisions.textContent=String(ds.meta.adaptiveDecisions??'—');ui.changes.textContent=String(ds.meta.phaseChanges??'—');ui.modeNote.textContent=mode==='fixed'?'Baseline replay: fixed phase timing.':mode==='local'?'Proposal replay: each junction responds to local queue pressure.':'Proposal replay: local decisions coordinated across the 5×5 grid.';document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));}
+function setMode(next){if(!datasets[next])return;mode=next;frameIndex=0;maxQueueSeen=0;showFrame()}
+function setCamera(kind){const targets={overview:[76,78,82],street:[16,13,25],north:[0,82,7]};const p=targets[kind]||targets.overview;camera.position.set(...p);controls.target.set(0,0,0);controls.update()}
+function onPick(e){const r=renderer.domElement.getBoundingClientRect();mouse.x=((e.clientX-r.left)/r.width)*2-1;mouse.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(mouse,camera);const hit=raycaster.intersectObjects(intersectionLayer.children,true)[0];if(hit){let o=hit.object;while(o&&!o.userData.intersectionId)o=o.parent;if(o){selectedIntersection=o.userData.intersectionId;ui.statusText.textContent=`Selected intersection ${selectedIntersection}`}}}
+function onResize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);drawChart()}
+function loop(now){requestAnimationFrame(loop);const dt=Math.min(.08,(now-lastTime)/1000);lastTime=now;if(playing){elapsed+=dt*speed;const ds=datasets[mode];if(ds){const step=ds.frames.length>1?Math.max(.05,(ds.frames[1].t-ds.frames[0].t)/3):1;if(elapsed>=step){const jumps=Math.floor(elapsed/step);elapsed-=jumps*step;frameIndex=(frameIndex+jumps)%ds.frames.length;showFrame()}}}controls?.update();renderer?.render(scene,camera)}
+async function load(){try{const entries=await Promise.all(Object.entries(DATA).map(async([k,url])=>[k,await fetch(url).then(r=>{if(!r.ok)throw new Error(`${url} HTTP ${r.status}`);return r.json()})]));datasets=Object.fromEntries(entries);initScene();showFrame();loading.style.display='none';ui.statusText.textContent='Replay ready';requestAnimationFrame(loop)}catch(err){loading.style.display='none';errorBox.style.display='block';errorBox.textContent='3D viewer başlatılamadı.\n\n'+err.message+'\n\nBu paket HTTP server üzerinden açılmalıdır; viewer.html dosyasına çift tıklamayın.';ui.status.classList.add('error');ui.statusText.textContent='Load error';console.error(err)}}
+document.querySelectorAll('.modes button').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));ui.play.addEventListener('click',()=>{playing=!playing;ui.play.textContent=playing?'Pause':'Play'});document.querySelector('#reset').addEventListener('click',()=>{frameIndex=0;elapsed=0;maxQueueSeen=0;showFrame();setCamera('overview')});document.querySelector('#speed').addEventListener('change',e=>speed=Number(e.target.value));document.querySelectorAll('.preset').forEach(b=>b.addEventListener('click',()=>setCamera(b.dataset.camera)));load();
+</script>
+</body>
+</html>
