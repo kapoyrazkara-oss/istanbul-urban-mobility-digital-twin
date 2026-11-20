@@ -18,7 +18,7 @@ KONTROLLER
 - Pause/Play, Reset ve hiz secimi replay akisini yonetir.
 - Mouse sol tus orbit, tekerlek zoom, sag tus pan icindir.
 - Overview, Street ve North kamera presetleridir.
-- Bir kavsaga tiklayinca secilen intersection adi sol panelde gorunur.
+- Bir kavsaga tiklayinca secilen intersection adi ve tipi sol panelde gorunur. Sahne, four-way, T-junction, roundabout ve offset junction formlarini karisik kullanir.
 
 DUZENLEME
 - Renkler, bina boyutlari ve sahne elemanlari viewer.html icindeki buildCity, buildIntersection ve tree fonksiyonlarinda bulunur.
